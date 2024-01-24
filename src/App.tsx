@@ -35,7 +35,10 @@ export function calcItemsFee(items: number) {
 }
 
 export function calcFridayRushFee(date: Date) {
-  if (date.getDate() === 5 && date.getHours() > 15 && date.getHours() < 19) {
+  if (date.getDay() === 5 && date.getHours() >= 15 && date.getHours() < 19) {
+    return 1.2;
+  }
+  else if (date.getHours() === 19 && date.getMinutes() === 0){
     return 1.2;
   }
   else {
@@ -43,11 +46,13 @@ export function calcFridayRushFee(date: Date) {
   }
 }
 
+
 export function calculateFee(cart: number, distance: number, items: number, date: Date) {
 
   if (cart <= 0) throw Error("Negative cart value");
   if (distance <= 0) throw Error("Negative cart value");
   if (items <= 0) throw Error("Negative cart value");
+  if (isNaN(cart) || isNaN(distance) || isNaN(items)) throw Error("Is not a number");
 
   if (cart < 200) {
     const cardFee = calcCardFee(cart);

@@ -111,8 +111,8 @@ test('total fee calculation when cart eq 9, distance eq 2500, items eq 14, date 
   expect(fee).toEqual(15)
 })
 test('total fee calculation when cart eq 0 then error', () => {
-  const testDate = new Date(2024, 0, 26, 19, 0)
-  const exec = () => calculateFee(0, 3500, 14, testDate)
+  const testDate = new Date(2024, 0, 26, 19, 0);
+  const exec = () => calculateFee(0, 3500, 14, testDate);
   expect(exec).toThrow(Error);
   expect(exec).toThrow("Negative cart value")
 })

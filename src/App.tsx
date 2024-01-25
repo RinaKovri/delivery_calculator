@@ -53,9 +53,7 @@ export function calculateFee(cart: number, distance: number, items: number, date
   if (cart <= 0) throw Error("Negative cart value");
   if (distance <= 0) throw Error("Negative cart value");
   if (items <= 0) throw Error("Negative cart value");
-  if (typeof cart !== 'number') throw Error("Is not a number");
-  if (typeof distance !== 'number') throw Error("Is not a number");
-  if (typeof items !== 'number') throw Error("Is not a number");
+
 
   if (cart < 200) {
     const cardFee = calcCardFee(cart);
@@ -80,15 +78,27 @@ const App = () => {
   const [items, setItems] = useState(0);
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [date, setDate] = useState(new Date());
+  const [errorMessage, setErrorMessage] = useState("");
 
   const calculate = () => {
-    const delivery = calculateFee(cart, distance, items, date);
-    setDeliveryFee(delivery);
-
+    if (isNaN(cart) || isNaN(distance) || isNaN(items) || cart <= 0 || distance <= 0 || items <= 0) {
+      setCart(0)
+      setDistance(0)
+      setItems(0)
+      setErrorMessage("Please enter a valid number");
+    }
+    else {
+      const delivery = calculateFee(cart, distance, items, date);
+      setDeliveryFee(delivery);
+    }
   }
   const handleDateChange = (date: Date) => {
     setDate(date);
     calcFridayRushFee(date);
+  }
+
+  const handleReset = () => {
+    setErrorMessage("")
   }
   return (
     <div className='container mt-5'>
@@ -113,6 +123,7 @@ const App = () => {
           <div className='col-sm-8'>
             <span>€</span>
           </div>
+          <div id='error-message'>{cart ? null : errorMessage}</div>
         </div>
         <div className="row mb-3">
           <label className='col-sm-2 col-form-label'>
@@ -130,6 +141,7 @@ const App = () => {
           <div className='col-sm-8'>
             <span>m</span>
           </div>
+          <div id='error-message'>{distance ? null : errorMessage}</div>
         </div>
         <div className="row mb-3">
           <label className='col-sm-2 col-form-label'>
@@ -145,6 +157,7 @@ const App = () => {
               data-test-id="numberOfItems"
               onChange={(e) => setItems(Number(e.target.value))} />
           </div>
+          <div id='error-message'>{items ? null : errorMessage}</div>
         </div>
         <div className="row mb-3">
           <label className='col-sm-2 col-form-label'>
@@ -170,6 +183,7 @@ const App = () => {
             <button
               type='reset'
               className='btn btn-secondary mt-3'
+              onClick={handleReset}
               style={{ height: '55px' }}>Reset values</button>
           </div>
         </div>

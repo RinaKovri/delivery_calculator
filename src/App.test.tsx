@@ -67,7 +67,7 @@ test('items fee calculation when items eq 13 then fee eq 5.7', () => {
   expect(fee).toEqual(5.7)
 });
 
-//testing friday rush fee
+// //testing friday rush fee
 test('friday rush fee calculation when date eq 24.01.2024 16:00 then fee eq 1', () => {
   const testDate = new Date(2024, 0, 24, 16, 0)
   const fee = calcFridayRushFee(testDate)

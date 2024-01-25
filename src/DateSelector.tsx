@@ -9,6 +9,7 @@ interface DateConstructor {
 
 interface DateSelectorProps {
     dateChange: (date: Date) => void;
+    id?: string;
 }
 
 
@@ -38,7 +39,7 @@ export class DateSelector extends React.Component<DateSelectorProps, DateConstru
                 selected={startDate}
                 showTimeSelect
                 timeFormat='HH:mm'
-                timeIntervals={15}
+                timeIntervals={1}
                 onChange={this.handleChange}
             />
         )

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { DateSelector } from './DateSelector';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 
 export function calcCardFee(cart: number) {
@@ -38,7 +39,7 @@ export function calcFridayRushFee(date: Date) {
   if (date.getDay() === 5 && date.getHours() >= 15 && date.getHours() < 19) {
     return 1.2;
   }
-  else if (date.getHours() === 19 && date.getMinutes() === 0){
+  else if (date.getHours() === 19 && date.getMinutes() === 0) {
     return 1.2;
   }
   else {
@@ -52,7 +53,9 @@ export function calculateFee(cart: number, distance: number, items: number, date
   if (cart <= 0) throw Error("Negative cart value");
   if (distance <= 0) throw Error("Negative cart value");
   if (items <= 0) throw Error("Negative cart value");
-  if (isNaN(cart) || isNaN(distance) || isNaN(items)) throw Error("Is not a number");
+  if (typeof cart !== 'number') throw Error("Is not a number");
+  if (typeof distance !== 'number') throw Error("Is not a number");
+  if (typeof items !== 'number') throw Error("Is not a number");
 
   if (cart < 200) {
     const cardFee = calcCardFee(cart);
@@ -88,46 +91,101 @@ const App = () => {
     calcFridayRushFee(date);
   }
   return (
-    <>
+    <div className='container mt-5'>
       <form>
-        <table>
-          <thead>
-            <tr>
-              <th colSpan={3}>Delivery Fee Calculator</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Cart Value</th>
-              <td><input type="text" onChange={(e) => setCart(Number(e.target.value))} /></td>
-              <td>€</td>
-            </tr>
-            <tr>
-              <th>Delivery distance</th>
-              <td><input type="text" onChange={(e) => setDistance(Number(e.target.value))} /></td>
-              <td>m</td>
-            </tr>
-            <tr>
-              <th>Amount of items</th>
-              <td><input type="text" onChange={(e) => setItems(Number(e.target.value))} /></td>
-            </tr>
-            <tr>
-              <DateSelector dateChange={handleDateChange} />
-            </tr>
-            <tr>
-              <td>
-                <button type='button' onClick={calculate}>Calculate delivery price</button>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>Delivery price: {deliveryFee}</th>
-            </tr>
-          </tfoot>
-        </table>
-      </form>
-    </>
+        <div>
+          <h3>Delivery Fee Calculator</h3>
+        </div>
+        <div className="row mb-3 mt-5">
+          <label className='col-sm-2 col-form-label'>
+            Cart Value
+          </label>
+          <div className='col-sm-2'>
+            <input
+              type="number"
+              placeholder='0'
+              className='form-control'
+              id='inputCartValue'
+              min={0}
+              data-test-id="cartValue"
+              onChange={(e) => setCart(Number(e.target.value))} />
+          </div>
+          <div className='col-sm-8'>
+            <span>€</span>
+          </div>
+        </div>
+        <div className="row mb-3">
+          <label className='col-sm-2 col-form-label'>
+            Delivery distance
+          </label>
+          <div className='col-sm-2'>
+            <input
+              type="number"
+              placeholder='0'
+              className='form-control'
+              id='inputDistanceValue'
+              min={0}
+              data-test-id="deliveryDistance"
+              onChange={(e) => setDistance(Number(e.target.value))} /></div>
+          <div className='col-sm-8'>
+            <span>m</span>
+          </div>
+        </div>
+        <div className="row mb-3">
+          <label className='col-sm-2 col-form-label'>
+            Amount of items
+          </label>
+          <div className='col-sm-2'>
+            <input
+              type="number"
+              placeholder='0'
+              className='form-control'
+              id='inputItemsValue'
+              min={0}
+              data-test-id="numberOfItems"
+              onChange={(e) => setItems(Number(e.target.value))} />
+          </div>
+        </div>
+        <div className="row mb-3">
+          <label className='col-sm-2 col-form-label'>
+            Date and time
+          </label>
+          <div className='col-sm-3'>
+            <DateSelector
+              dateChange={handleDateChange}
+              id='inputDateValue'
+              data-test-id='orderTime' />
+          </div>
+        </div>
+        <div className="row mb-3">
+          <div className='col-sm-3'>
+            <button
+              type='button'
+              className='btn custom-color mt-3'
+              onClick={calculate}>
+              Calculate delivery fee
+            </button>
+          </div>
+          <div className='col-sm-9'>
+            <button
+              type='reset'
+              className='btn btn-secondary mt-3'
+              style={{ height: '55px' }}>Reset values</button>
+          </div>
+        </div>
+        <div className="row mb-3 mt-5">
+          <div className='col-sm-2'>
+            <span style={{ fontSize: '20px' }}>Delivery price:</span>
+          </div>
+          <div
+            data-test-id="fee"
+            className='col-sm-10'
+            style={{ fontSize: '20px' }}>
+            {deliveryFee}
+          </div>
+        </div>
+      </form >
+    </div>
   )
 }
 

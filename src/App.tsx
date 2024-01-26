@@ -6,7 +6,7 @@ import './App.css';
 
 export function calcCardFee(cart: number) {
   if (cart < 10) {
-    return 10 - cart;
+    return Number((10 - cart).toFixed(1));
   }
   else {
     return 0;
@@ -78,28 +78,44 @@ const App = () => {
   const [items, setItems] = useState(0);
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [date, setDate] = useState(new Date());
-  const [errorMessage, setErrorMessage] = useState("");
+  const [inputErrors, setInputErrors] = useState({
+    cart: false,
+    distance: false,
+    items: false,
+  });
 
   const calculate = () => {
-    if (isNaN(cart) || isNaN(distance) || isNaN(items) || cart <= 0 || distance <= 0 || items <= 0) {
-      setCart(0)
-      setDistance(0)
-      setItems(0)
-      setErrorMessage("Please enter a valid number");
+
+    const errors = {
+      cart: isNaN(cart) || cart <= 0,
+      distance: isNaN(distance) || distance <= 0,
+      items: isNaN(items) || items <= 0
+    };
+
+    setInputErrors(errors);
+
+    if (errors.cart || errors.distance || errors.items) {
+      setDeliveryFee(0);
+      return;
     }
     else {
       const delivery = calculateFee(cart, distance, items, date);
       setDeliveryFee(delivery);
     }
   }
+
   const handleDateChange = (date: Date) => {
     setDate(date);
     calcFridayRushFee(date);
   }
-
   const handleReset = () => {
-    setErrorMessage("")
+    setInputErrors({
+      cart: false,
+      distance: false,
+      items: false
+    });
   }
+
   return (
     <div className='container mt-5'>
       <form>
@@ -118,12 +134,15 @@ const App = () => {
               id='inputCartValue'
               min={0}
               data-test-id="cartValue"
-              onChange={(e) => setCart(Number(e.target.value))} />
+              onChange={(e) => {
+                setCart(Number(e.target.value));
+                setInputErrors({ ...inputErrors, cart: false });
+              }} />
           </div>
           <div className='col-sm-8'>
             <span>€</span>
           </div>
-          <div id='error-message'>{cart ? null : errorMessage}</div>
+          {inputErrors.cart && <div id='error-message'>Please enter a valid number</div>}
         </div>
         <div className="row mb-3">
           <label className='col-sm-2 col-form-label'>
@@ -137,11 +156,14 @@ const App = () => {
               id='inputDistanceValue'
               min={0}
               data-test-id="deliveryDistance"
-              onChange={(e) => setDistance(Number(e.target.value))} /></div>
+              onChange={(e) => {
+                setDistance(Number(e.target.value));
+                setInputErrors({ ...inputErrors, distance: false });
+              }} /></div>
           <div className='col-sm-8'>
             <span>m</span>
           </div>
-          <div id='error-message'>{distance ? null : errorMessage}</div>
+          {inputErrors.distance && <div id='error-message'>Please enter a valid number</div>}
         </div>
         <div className="row mb-3">
           <label className='col-sm-2 col-form-label'>
@@ -155,15 +177,18 @@ const App = () => {
               id='inputItemsValue'
               min={0}
               data-test-id="numberOfItems"
-              onChange={(e) => setItems(Number(e.target.value))} />
+              onChange={(e) => {
+                setItems(Number(e.target.value));
+                setInputErrors({ ...inputErrors, items: false });
+              }} />
           </div>
-          <div id='error-message'>{items ? null : errorMessage}</div>
+          {inputErrors.items && <div id='error-message'>Please enter a valid number</div>}
         </div>
         <div className="row mb-3">
           <label className='col-sm-2 col-form-label'>
             Date and time
           </label>
-          <div className='col-sm-3'>
+          <div className='col-sm-2'>
             <DateSelector
               dateChange={handleDateChange}
               id='inputDateValue'

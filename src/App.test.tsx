@@ -1,13 +1,13 @@
-import { calcCardFee, calcDistanceFee, calcItemsFee, calcFridayRushFee, calculateFee } from "./App";
+import { calcCardFee, calcDistanceFee, calcItemsFee, calcFridayRushFee, calculateFee } from "./calculations";
 
 //testing card fee
-test('card fee calculation when cart eq 1 then fee eq 9', () => {
-  const fee = calcCardFee(1)
-  expect(fee).toEqual(9)
+test('card fee calculation when cart eq 1.1 then fee eq 8.9', () => {
+  const fee = calcCardFee(1.1)
+  expect(fee).toEqual(8.9)
 });
-test('card fee calculation when cart eq 9 then fee eq 1', () => {
-  const fee = calcCardFee(9)
-  expect(fee).toEqual(1)
+test('card fee calculation when cart eq 9.1 then fee eq 0.9', () => {
+  const fee = calcCardFee(9.1)
+  expect(fee).toEqual(0.9)
 });
 test('card fee calculation when cart eq 10 then fee eq 0', () => {
   const fee = calcCardFee(10)

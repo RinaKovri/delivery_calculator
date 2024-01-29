@@ -1,11 +1,7 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
 
-interface DateConstructor {
-    startDate: Date;
-}
 
 interface DateSelectorProps {
     dateChange: (date: Date) => void;
@@ -13,35 +9,23 @@ interface DateSelectorProps {
 }
 
 
-export class DateSelector extends React.Component<DateSelectorProps, DateConstructor> {
-    constructor(props: DateSelectorProps) {
-        super(props);
-        this.state = {
-            startDate: new Date()
-        };
-        this.handleChange = this.handleChange.bind(this);
+const DateSelector: React.FC<DateSelectorProps> = ({ dateChange, id }) => {
+    const [selectedDate, setSelectedDate] = useState(new Date());
+
+    const handleChange = (date: Date) => {
+        setSelectedDate(date);
+        dateChange(date);
     }
 
-    private handleChange(date: Date) {
-        console.log(date);  
-        this.setState({
-            startDate: date
-        });
+    return (
+        <DatePicker
+        dateFormat="dd/MM/yyyy HH:mm"
+        selected={selectedDate}
+        showTimeSelect
+        timeFormat='HH:mm'
+        timeIntervals={10}
+        onChange={handleChange} />
+    );
+};
 
-        this.props.dateChange(date);
-    }
-
-    public render() {
-        const { startDate } = this.state;
-        return (
-            <DatePicker
-                dateFormat="dd/MM/yyyy HH:mm"
-                selected={startDate}
-                showTimeSelect
-                timeFormat='HH:mm'
-                timeIntervals={1}
-                onChange={this.handleChange}
-            />
-        )
-    }
-}
+export default DateSelector;

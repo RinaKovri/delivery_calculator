@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DateSelector } from './DateSelector';
+import DateSelector from './DateSelector';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -48,116 +48,118 @@ const App = () => {
       distance: false,
       items: false
     });
+    setCart(0);
+    setDistance(0);
+    setItems(0);
+    setDate(new Date());
   }
 
   return (
     <div className='container mt-5'>
-      <form>
-        <div>
-          <h3>Delivery Fee Calculator</h3>
+      <div>
+        <h3>Delivery Fee Calculator</h3>
+      </div>
+      <div className="row mb-3 mt-5">
+        <label className='col-sm-2 col-form-label'>
+          Cart Value
+        </label>
+        <div className='col-sm-2'>
+          <input
+            type="number"
+            placeholder='0'
+            className='form-control'
+            id='inputCartValue'
+            min={0}
+            data-test-id="cartValue"
+            onChange={(e) => {
+              setCart(Number(e.target.value));
+              setInputErrors({ ...inputErrors, cart: false });
+            }} />
         </div>
-        <div className="row mb-3 mt-5">
-          <label className='col-sm-2 col-form-label'>
-            Cart Value
-          </label>
-          <div className='col-sm-2'>
-            <input
-              type="number"
-              placeholder='0'
-              className='form-control'
-              id='inputCartValue'
-              min={0}
-              data-test-id="cartValue"
-              onChange={(e) => {
-                setCart(Number(e.target.value));
-                setInputErrors({ ...inputErrors, cart: false });
-              }} />
-          </div>
-          <div className='col-sm-8'>
-            <span>€</span>
-          </div>
-          {inputErrors.cart && <div id='error-message'>Please enter a valid number</div>}
+        <div className='col-sm-8'>
+          <span>€</span>
         </div>
-        <div className="row mb-3">
-          <label className='col-sm-2 col-form-label'>
-            Delivery distance
-          </label>
-          <div className='col-sm-2'>
-            <input
-              type="number"
-              placeholder='0'
-              className='form-control'
-              id='inputDistanceValue'
-              min={0}
-              data-test-id="deliveryDistance"
-              onChange={(e) => {
-                setDistance(Number(e.target.value));
-                setInputErrors({ ...inputErrors, distance: false });
-              }} /></div>
-          <div className='col-sm-8'>
-            <span>m</span>
-          </div>
-          {inputErrors.distance && <div id='error-message'>Please enter a valid number</div>}
+        {inputErrors.cart && <div id='error-message'>Please enter a valid number</div>}
+      </div>
+      <div className="row mb-3">
+        <label className='col-sm-2 col-form-label'>
+          Delivery distance
+        </label>
+        <div className='col-sm-2'>
+          <input
+            type="number"
+            placeholder='0'
+            className='form-control'
+            id='inputDistanceValue'
+            min={0}
+            data-test-id="deliveryDistance"
+            onChange={(e) => {
+              setDistance(Number(e.target.value));
+              setInputErrors({ ...inputErrors, distance: false });
+            }} /></div>
+        <div className='col-sm-8'>
+          <span>m</span>
         </div>
-        <div className="row mb-3">
-          <label className='col-sm-2 col-form-label'>
-            Amount of items
-          </label>
-          <div className='col-sm-2'>
-            <input
-              type="number"
-              placeholder='0'
-              className='form-control'
-              id='inputItemsValue'
-              min={0}
-              data-test-id="numberOfItems"
-              onChange={(e) => {
-                setItems(Number(e.target.value));
-                setInputErrors({ ...inputErrors, items: false });
-              }} />
-          </div>
-          {inputErrors.items && <div id='error-message'>Please enter a valid number</div>}
+        {inputErrors.distance && <div id='error-message'>Please enter a valid number</div>}
+      </div>
+      <div className="row mb-3">
+        <label className='col-sm-2 col-form-label'>
+          Amount of items
+        </label>
+        <div className='col-sm-2'>
+          <input
+            type="number"
+            placeholder='0'
+            className='form-control'
+            id='inputItemsValue'
+            min={0}
+            data-test-id="numberOfItems"
+            onChange={(e) => {
+              setItems(Number(e.target.value));
+              setInputErrors({ ...inputErrors, items: false });
+            }} />
         </div>
-        <div className="row mb-3">
-          <label className='col-sm-2 col-form-label'>
-            Date and time
-          </label>
-          <div className='col-sm-2'>
-            <DateSelector
-              dateChange={handleDateChange}
-              id='inputDateValue'
-              data-test-id='orderTime' />
-          </div>
+        {inputErrors.items && <div id='error-message'>Please enter a valid number</div>}
+      </div>
+      <div className="row mb-3">
+        <label className='col-sm-2 col-form-label'>
+          Date and time
+        </label>
+        <div className='col-sm-2'>
+          <DateSelector
+            dateChange={handleDateChange}
+            id='inputDateValue'
+            data-test-id='orderTime' />
         </div>
-        <div className="row mb-3">
-          <div className='col-sm-3'>
-            <button
-              type='button'
-              className='btn custom-color mt-3'
-              onClick={calculate}>
-              Calculate delivery fee
-            </button>
-          </div>
-          <div className='col-sm-9'>
-            <button
-              type='reset'
-              className='btn btn-secondary mt-3'
-              onClick={handleReset}
-              style={{ height: '55px' }}>Reset values</button>
-          </div>
+      </div>
+      <div className="row mb-3">
+        <div className='col-sm-3'>
+          <button
+            type='button'
+            className='btn custom-color mt-3'
+            onClick={calculate}>
+            Calculate delivery fee
+          </button>
         </div>
-        <div className="row mb-3 mt-5">
-          <div className='col-sm-2'>
-            <span style={{ fontSize: '20px' }}>Delivery price:</span>
-          </div>
-          <div
-            data-test-id="fee"
-            className='col-sm-10'
-            style={{ fontSize: '20px' }}>
-            {deliveryFee}
-          </div>
+        <div className='col-sm-9'>
+          <button
+            type='reset'
+            className='btn btn-secondary mt-3'
+            onClick={handleReset}
+            style={{ height: '55px' }}>Reset values</button>
         </div>
-      </form >
+      </div>
+      <div className="row mb-3 mt-5">
+        <div className='col-sm-2'>
+          <span style={{ fontSize: '20px' }}>Delivery price:</span>
+        </div>
+        <div
+          data-test-id="fee"
+          className='col-sm-10'
+          style={{ fontSize: '20px' }}>
+          {deliveryFee}
+        </div>
+      </div>
     </div>
   )
 }

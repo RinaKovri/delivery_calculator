@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import DateSelector from './DateSelector';
+//import DateSelector from './DateSelector';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-import { calcFridayRushFee, calculateFee } from './calculations';
+import { formatLocalDateTime, calcFridayRushFee, calculateFee } from './calculations';
+
 
 
 const App = () => {
@@ -38,10 +39,12 @@ const App = () => {
     }
   }
 
-  const handleDateChange = (date: Date) => {
-    setDate(date);
-    calcFridayRushFee(date);
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = new Date(e.target.value);
+    setDate(selectedDate);
+    calcFridayRushFee(selectedDate);
   }
+
   const handleReset = () => {
     setInputErrors({
       cart: false,
@@ -52,6 +55,7 @@ const App = () => {
     setDistance(0);
     setItems(0);
     setDate(new Date());
+    setDeliveryFee(0);
     console.log("Values after reset:", cart, distance, items, date);
   }
 
@@ -67,13 +71,12 @@ const App = () => {
         <div className='col-sm-2'>
           <input
             type="number"
-            placeholder='0'
+            value={cart}
             className='form-control'
-            id='inputCartValue'
             min={0}
             data-test-id="cartValue"
             onChange={(e) => {
-              setCart(Number(e.target.value));
+              setCart(parseFloat(e.target.value));
               setInputErrors({ ...inputErrors, cart: false });
             }} />
         </div>
@@ -89,9 +92,8 @@ const App = () => {
         <div className='col-sm-2'>
           <input
             type="number"
-            placeholder='0'
+            value={distance}
             className='form-control'
-            id='inputDistanceValue'
             min={0}
             data-test-id="deliveryDistance"
             onChange={(e) => {
@@ -110,9 +112,8 @@ const App = () => {
         <div className='col-sm-2'>
           <input
             type="number"
-            placeholder='0'
+            value={items}
             className='form-control'
-            id='inputItemsValue'
             min={0}
             data-test-id="numberOfItems"
             onChange={(e) => {
@@ -127,10 +128,11 @@ const App = () => {
           Date and time
         </label>
         <div className='col-sm-2'>
-          <DateSelector
-            dateChange={handleDateChange}
-            id='inputDateValue'
-            data-test-id='orderTime' />
+          <input type='datetime-local'
+            data-test-id='orderTime'
+            value={formatLocalDateTime(date)}
+            onChange={handleDateChange}
+          />
         </div>
       </div>
       <div className="row mb-3">

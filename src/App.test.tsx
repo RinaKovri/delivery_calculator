@@ -41,7 +41,7 @@ describe('App Component', () => {
         fireEvent.click(screen.getByText(/Calculate delivery fee/i));
 
 
-        expect(screen.getByTestId('fee')).toHaveTextContent('31');
+        expect(screen.getByTestId('fee')).toHaveTextContent('3.1');
     });
 
     test('resets values correctly', () => {

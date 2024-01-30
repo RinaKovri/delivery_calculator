@@ -22,8 +22,8 @@ const App = () => {
 
     const errors = {
       cart: isNaN(cart) || cart <= 0,
-      distance: isNaN(distance) || distance <= 0,
-      items: isNaN(items) || items <= 0
+      distance: isNaN(distance) || distance <= 0 || !Number.isInteger(distance),
+      items: isNaN(items) || items <= 0 || !Number.isInteger(items)
     };
 
     setInputErrors(errors);
@@ -52,6 +52,7 @@ const App = () => {
     setDistance(0);
     setItems(0);
     setDate(new Date());
+    console.log("Values after reset:", cart, distance, items, date);
   }
 
   return (

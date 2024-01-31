@@ -19,14 +19,14 @@ const App = () => {
   });
 
   useEffect(() => {
-    setInputErrors({
-      ...inputErrors,
+    const error = {
       cart: !validateCart(cart),
       distance: !validateDistance(distance),
       items: !validateItems(items),
       date: !validateDate(date)
-    });
-    if (!cart || !distance || !items || !date || inputErrors.cart || inputErrors.distance || inputErrors.items || inputErrors.date) {
+    }
+    setInputErrors(error);
+    if (cart == null || distance == null || items == null || date == null || error.cart || error.distance || error.items || error.date) {
       setDisable(true);
     }
     else {
@@ -56,7 +56,6 @@ const App = () => {
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = new Date(e.target.value);
     setDate(selectedDate);
-    calcFridayRushFee(selectedDate);
   }
 
   const handleReset = () => {

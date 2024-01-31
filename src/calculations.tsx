@@ -72,5 +72,4 @@ export function calculateFee(cart: number, distance: number, items: number, date
   else {
     return 0;
   }
-
 }

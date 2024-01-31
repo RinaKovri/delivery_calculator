@@ -1,25 +1,34 @@
 import { render, fireEvent, screen, configure } from '@testing-library/react';
 import App from './App';
-import { formatLocalDateTime } from './calculations';
-
+import { currentDate } from './util';
 
 configure({
-    testIdAttribute: 'data-test-id',
+    testIdAttribute: 'data-test-id', // change default data test id
 });
+
+jest.mock('./util') // mock date for pass validation
 
 describe('App Component', () => {
     test('renders without errors', () => {
         render(<App />);
+
         expect(screen.getByText(/Delivery Fee Calculator/i)).toBeInTheDocument();
+        expect(screen.getByTestId('cartValue')).toHaveValue(null);
+        expect(screen.getByTestId('deliveryDistance')).toHaveValue(null);
+        expect(screen.getByTestId('numberOfItems')).toHaveValue(null);
+        expect(screen.getByTestId('orderTime')).toHaveValue("");
     });
 
     test('calculates delivery fee correctly', () => {
+        const mockedAdd = currentDate as jest.MockedFunction<typeof currentDate>;
+        mockedAdd.mockImplementation(() => new Date('01/29/2024 08:50'));
+
         render(<App />);
 
         fireEvent.change(screen.getByTestId('cartValue'), { target: { value: '100' } });
         fireEvent.change(screen.getByTestId('deliveryDistance'), { target: { value: '500' } });
         fireEvent.change(screen.getByTestId('numberOfItems'), { target: { value: '3' } });
-        fireEvent.change(screen.getByTestId('orderTime'), { target: { value: new Date('01/02/2024 09:50') } });
+        fireEvent.change(screen.getByTestId('orderTime'), { target: { value: "2024-01-30T20:17:46" } });
 
         fireEvent.click(screen.getByText(/Calculate delivery fee/i));
 
@@ -27,12 +36,15 @@ describe('App Component', () => {
     });
 
     test('calculates delivery fee correctly', () => {
+        const mockedAdd = currentDate as jest.MockedFunction<typeof currentDate>;
+        mockedAdd.mockImplementation(() => new Date('01/29/2024 08:50'));
+
         render(<App />);
 
         fireEvent.change(screen.getByTestId('cartValue'), { target: { value: '8.9' } });
         fireEvent.change(screen.getByTestId('deliveryDistance'), { target: { value: '500' } });
         fireEvent.change(screen.getByTestId('numberOfItems'), { target: { value: '3' } });
-        fireEvent.change(screen.getByTestId('orderTime'), { target: { value: new Date('01/02/2024 09:50') } });
+        fireEvent.change(screen.getByTestId('orderTime'), { target: { value: "2024-01-30T20:17:46" } });
 
         fireEvent.click(screen.getByText(/Calculate delivery fee/i));
 
@@ -40,18 +52,21 @@ describe('App Component', () => {
     });
 
     test('resets values correctly', () => {
+        const mockedAdd = currentDate as jest.MockedFunction<typeof currentDate>;
+        mockedAdd.mockImplementation(() => new Date('01/29/2024 08:50'));
+
         render(<App />);
 
         fireEvent.change(screen.getByTestId('cartValue'), { target: { value: '100' } });
         fireEvent.change(screen.getByTestId('deliveryDistance'), { target: { value: '500' } });
         fireEvent.change(screen.getByTestId('numberOfItems'), { target: { value: '3' } });
-        fireEvent.change(screen.getByTestId('orderTime'), { target: { value: new Date('01/02/2024 09:50') } });
+        fireEvent.change(screen.getByTestId('orderTime'), { target: { value: "2024-01-30T20:17:46" } });
 
         fireEvent.click(screen.getByText(/Reset values/i));
 
-        expect(screen.getByTestId('cartValue')).toHaveValue(0);
-        expect(screen.getByTestId('deliveryDistance')).toHaveValue(0);
-        expect(screen.getByTestId('numberOfItems')).toHaveValue(0);
-        expect(screen.getByTestId('orderTime')).toHaveValue(formatLocalDateTime(new Date()));
+        expect(screen.getByTestId('cartValue')).toHaveValue(null);
+        expect(screen.getByTestId('deliveryDistance')).toHaveValue(null);
+        expect(screen.getByTestId('numberOfItems')).toHaveValue(null);
+        expect(screen.getByTestId('orderTime')).toHaveValue("");
     });
 });

@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { formatLocalDateTime, calcFridayRushFee, calculateFee } from './calculations';
+import { validateCart, validateDate, validateDistance, validateItems } from './validation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-
-
 
 const App = () => {
   const [cart, setCart] = useState<null | number>(null);
   const [distance, setDistance] = useState<null | number>(null);
   const [items, setItems] = useState<null | number>(null);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<null | Date>(null);
   const [disable, setDisable] = useState(true);
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [inputErrors, setInputErrors] = useState({
@@ -22,10 +21,10 @@ const App = () => {
   useEffect(() => {
     setInputErrors({
       ...inputErrors,
-      cart: !!cart && (isNaN(cart) || cart <= 0),
-      distance: !!distance && (isNaN(distance) || distance <= 0 || !Number.isInteger(distance)),
-      items: !!items && (isNaN(items) || items <= 0 || !Number.isInteger(items)),
-      date: !!date && new Date().getTime() > date.getTime()
+      cart: !validateCart(cart),
+      distance: !validateDistance(distance),
+      items: !validateItems(items),
+      date: !validateDate(date)
     });
     if (!cart || !distance || !items || !date || inputErrors.cart || inputErrors.distance || inputErrors.items || inputErrors.date) {
       setDisable(true);
@@ -36,7 +35,8 @@ const App = () => {
   }, [cart, distance, items, date]);
 
   const calculate = () => {
-    if (cart && distance && items && date) {
+    if (cart && distance && items && date &&
+      validateCart(cart) && validateDistance(distance) && validateItems(items) && validateDate(date)) {
       const delivery = calculateFee(cart, distance, items, date);
       setDeliveryFee(delivery);
     }
@@ -69,7 +69,7 @@ const App = () => {
     setCart(null);
     setDistance(null);
     setItems(null);
-    setDate(new Date());
+    setDate(null);
     setDeliveryFee(0);
     console.log("Values after reset:", cart, distance, items, date);
   }
@@ -136,7 +136,7 @@ const App = () => {
         <div className='col-sm-2'>
           <input type='datetime-local'
             data-test-id='orderTime'
-            value={formatLocalDateTime(date)}
+            value={date == null ? "" : formatLocalDateTime(date)}
             onChange={handleDateChange}
           />
         </div>
@@ -176,3 +176,4 @@ const App = () => {
 }
 
 export default App
+

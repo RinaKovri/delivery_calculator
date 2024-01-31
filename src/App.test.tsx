@@ -1,6 +1,6 @@
 import { render, fireEvent, screen, configure } from '@testing-library/react';
 import App from './App';
-import {formatLocalDateTime} from './calculations';
+import { formatLocalDateTime } from './calculations';
 
 
 configure({
@@ -16,15 +16,12 @@ describe('App Component', () => {
     test('calculates delivery fee correctly', () => {
         render(<App />);
 
-
         fireEvent.change(screen.getByTestId('cartValue'), { target: { value: '100' } });
         fireEvent.change(screen.getByTestId('deliveryDistance'), { target: { value: '500' } });
         fireEvent.change(screen.getByTestId('numberOfItems'), { target: { value: '3' } });
         fireEvent.change(screen.getByTestId('orderTime'), { target: { value: new Date('01/02/2024 09:50') } });
 
-
         fireEvent.click(screen.getByText(/Calculate delivery fee/i));
-
 
         expect(screen.getByTestId('fee')).toHaveTextContent('2');
     });
@@ -32,15 +29,12 @@ describe('App Component', () => {
     test('calculates delivery fee correctly', () => {
         render(<App />);
 
-
         fireEvent.change(screen.getByTestId('cartValue'), { target: { value: '8.9' } });
         fireEvent.change(screen.getByTestId('deliveryDistance'), { target: { value: '500' } });
         fireEvent.change(screen.getByTestId('numberOfItems'), { target: { value: '3' } });
         fireEvent.change(screen.getByTestId('orderTime'), { target: { value: new Date('01/02/2024 09:50') } });
 
-
         fireEvent.click(screen.getByText(/Calculate delivery fee/i));
-
 
         expect(screen.getByTestId('fee')).toHaveTextContent('3.1');
     });
@@ -48,14 +42,12 @@ describe('App Component', () => {
     test('resets values correctly', () => {
         render(<App />);
 
-
         fireEvent.change(screen.getByTestId('cartValue'), { target: { value: '100' } });
         fireEvent.change(screen.getByTestId('deliveryDistance'), { target: { value: '500' } });
         fireEvent.change(screen.getByTestId('numberOfItems'), { target: { value: '3' } });
         fireEvent.change(screen.getByTestId('orderTime'), { target: { value: new Date('01/02/2024 09:50') } });
 
         fireEvent.click(screen.getByText(/Reset values/i));
-
 
         expect(screen.getByTestId('cartValue')).toHaveValue(0);
         expect(screen.getByTestId('deliveryDistance')).toHaveValue(0);

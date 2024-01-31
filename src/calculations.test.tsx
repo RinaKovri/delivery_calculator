@@ -1,7 +1,4 @@
-
 import { calcCardFee, calcDistanceFee, calcItemsFee, calcFridayRushFee, calculateFee } from "./calculations";
-
-
 
 //testing card fee
 test('card fee calculation when cart eq 1.1 then fee eq 8.9', () => {

@@ -1,6 +1,3 @@
-
-
-
 export function calcCardFee(cart: number) {
   if (cart < 10) {
     return parseFloat((10 - cart).toFixed(2));

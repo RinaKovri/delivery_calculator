@@ -10,7 +10,7 @@
     border-color: #018cc8;  
 }
 
-#error-message {
+.error-message {
   color: red;
 }
 

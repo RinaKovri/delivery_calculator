@@ -39,6 +39,20 @@ const App = () => {
     }
   }
 
+  const handleCartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCart(parseFloat(e.target.value));
+    setInputErrors({ ...inputErrors, cart: false });
+  }
+
+  const handleDistanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDistance(Number(e.target.value));
+    setInputErrors({ ...inputErrors, distance: false });
+  }
+  const handleItemsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setItems(Number(e.target.value));
+    setInputErrors({ ...inputErrors, items: false });
+  }
+
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedDate = new Date(e.target.value);
     setDate(selectedDate);
@@ -75,10 +89,7 @@ const App = () => {
             className='form-control'
             min={0}
             data-test-id="cartValue"
-            onChange={(e) => {
-              setCart(parseFloat(e.target.value));
-              setInputErrors({ ...inputErrors, cart: false });
-            }} />
+            onChange={handleCartChange} />
         </div>
         <div className='col-sm-8'>
           <span>€</span>
@@ -96,10 +107,7 @@ const App = () => {
             className='form-control'
             min={0}
             data-test-id="deliveryDistance"
-            onChange={(e) => {
-              setDistance(Number(e.target.value));
-              setInputErrors({ ...inputErrors, distance: false });
-            }} /></div>
+            onChange={handleDistanceChange} /></div>
         <div className='col-sm-8'>
           <span>m</span>
         </div>
@@ -116,12 +124,9 @@ const App = () => {
             className='form-control'
             min={0}
             data-test-id="numberOfItems"
-            onChange={(e) => {
-              setItems(Number(e.target.value));
-              setInputErrors({ ...inputErrors, items: false });
-            }} />
+            onChange={handleItemsChange} />
         </div>
-        {inputErrors.items && <div id='error-message'>Please enter a valid number</div>}
+        {inputErrors.items && <div data-test-id="errorMessage">Please enter a valid number</div>}
       </div>
       <div className="row mb-3">
         <label className='col-sm-2 col-form-label'>

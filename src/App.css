@@ -2,17 +2,15 @@
     background-color: #009de01c; 
     color: #018cc8; 
     height: 55px;
+    border-color: #018cc8;
   }
 .custom-color:hover{
     background-color: #009de02f;
-    color: #018cc8;   
+    color: #018cc8; 
+    border-color: #018cc8;  
 }
 
 #error-message {
   color: red;
 }
 
-/* img {
-  width: 30px;
-  height: 30px;
-} */

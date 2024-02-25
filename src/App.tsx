@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { formatLocalDateTime, calcFridayRushFee, calculateFee } from './calculations';
+import { formatLocalDateTime, calculateFee } from './calculations';
 import { validateCart, validateDate, validateDistance, validateItems } from './validation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
